@@ -1,0 +1,886 @@
+%%%%[0]TYPE DE DOCUMENTS%%%%
+\documentclass[a4paper]{article} %https://en.wikibooks.org/wiki/LaTeX/Document_Structure
+
+%%%%[1]PACKAGES%%%%
+%https://ilm-perso.univ-lyon1.fr/~aberut/textes/exemple_template_these.pdf
+%%%[1.1]Généraux%%%
+%%[1.1.1] Divers%%
+\usepackage[french]{babel} %Utilise les extensions en français
+\usepackage{graphicx} % Required for inserting images
+\usepackage[top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry} %Réduit les marges
+\usepackage[T1]{fontenc} % prend en charge des caractères spéciaux
+\usepackage[utf8]{inputenc} % prend en charge des caractères spéciaux
+\usepackage{listings} %permet d'inclure du code
+\usepackage[dvipsnames]{xcolor} %plus de couleurs prédéfinies
+\usepackage[ natbib=true, style=numeric,sorting=none]{biblatex} %Bibliographie
+\addbibresource{citation.bib} %Import the bibliography file
+\usepackage{booktabs} %Needed for tables
+\usepackage{comment} %permet de ne pas afficher des sections de codes
+%%[1.1.2] Esthétiques%%
+\usepackage[colorlinks=true, allcolors=blue]{hyperref} %personnaliser les reférences
+\hypersetup{% change la couleur des références
+  colorlinks = true,
+  linkcolor  = violet,
+  urlcolor=violet
+}
+\usepackage[Lenny]{fncychap} %chapitres plus jolis
+\usepackage{float} %permet l'option [H] sur les figures qui force leur emplacement
+\usepackage{csquotes}[language=french] % gestion des guillemets dans les citations bibliographiques
+
+
+
+%%%[1.2]Environnement pour les maths%%%
+\usepackage{amsthm} % permet de faire des théorèmes, lemmes, etc
+\usepackage{amssymb} %permet d'utiliser plus de symboles 
+\usepackage{physics} %symboles en plus
+\usepackage{siunitx} %Formatages des nombres
+\usepackage{tensor} %emplacement des indices, utiliser \Gamma\indices{_a^b}
+\usepackage{slashed} %pour les slash de Feynmann
+\usepackage[b]{esvect} %pour les vecteurs, utiliser \vv{x}
+\numberwithin{equation}{section} %Compteur des équations réinitialisé à chaque section
+\makeatletter %Permet d'utiliser "@" pour la création de commandes perso
+\def\th@plain{% configure le style des théorèmes
+  \thm@notefont{}% same as heading font
+  \itshape % body font
+}
+\def\th@definition{% configure le style des définitions
+  \thm@notefont{}% same as heading font
+  \normalfont % body font
+}
+%%%[1.2.1] Créations des styles%%%
+\theoremstyle{definition}
+\newtheorem*{question}{Question}%[section]
+\newtheorem{definition}{Définition}[section]
+\newtheorem{regle}{Règle}[section]
+
+\theoremstyle{remark}
+\newtheorem{notation}[definition]{Notation}
+\newtheorem*{remark}{Remarque}%[section]
+
+\theoremstyle{plain}% default
+\newtheorem{prop}{Propriété}[section]
+\newtheorem{thm}[prop]{Théorème}
+\newtheorem{exo}{Exercice}[section]
+\newtheorem{sol}{Solution}[section]
+\newtheorem{ind}[sol]{Indication}
+\renewenvironment{proof}{{\bfseries Preuve.}}{}
+
+\definecolor{gris}{RGB}{110,110,110}
+\definecolor{noir}{RGB}{0,0,0}
+\newtheoremstyle{style_exemple}{}{}{\color{gris}}{}{\color{noir}\bfseries}{}{ }{}
+\theoremstyle{style_exemple}
+\newtheorem*{exemple}{Exemple:}%[regle]
+
+%%%[1.2.2] Créations des couleurs personnalisées%%%
+\usepackage[outline]{contour}
+\contourlength{1.3pt}
+\usepackage[strict]{changepage}% for adjustwidth environment
+\usepackage{framed}% for formal definitions
+% environment derived from framed.sty: see leftbar environment definition
+\definecolor{formalshade}{rgb}{0.95,0.95,1}
+\definecolor{defshade}{RGB}{230, 243, 226} % pour definition, regle et notation
+\definecolor{thmshade}{RGB}{236, 221, 253} % pour thm et proposition
+\definecolor{solshade}{RGB}{255, 243, 230} % pour solution et indication
+
+%%%[1.2.3] Création des cadres cas par cas%%%
+%Cadre citations (1/8)------------------------------
+\newenvironment{formal}{%
+  \def\FrameCommand{%
+    \hspace{1pt}%
+    {\color{teal}\vrule width 2pt}%
+    {\color{formalshade}\vrule width 4pt}%
+    \colorbox{formalshade}%
+  }%
+  \MakeFramed{\advance\hsize-\width\FrameRestore}%
+  \noindent\hspace{-4.55pt}% disable indenting first paragraph
+  \begin{adjustwidth}{}{7pt}%
+  \vspace{2pt}\vspace{2pt}%
+}
+{%
+  \vspace{2pt}\end{adjustwidth}\endMakeFramed%
+}
+
+%Cadre Def (2/8)------------------------------
+\newenvironment{formal_def}{%
+  \def\FrameCommand{%
+    \hspace{0pt}%
+    {\color{OliveGreen}\vrule width 2pt}%
+    {\color{defshade}\vrule width 4pt}%
+    \colorbox{defshade}%
+  }%
+  \MakeFramed{\advance\hsize-\width\FrameRestore}%
+  \noindent\hspace{-4.55pt}% disable indenting first paragraph
+  \begin{adjustwidth}{}{7pt}%
+  \vspace{2pt}\vspace{2pt}%
+}
+{%
+  \vspace{2pt}\end{adjustwidth}\endMakeFramed%
+}
+%Cadre Regle (3/8)------------------------------
+\newenvironment{formal_regle}{%
+  \def\FrameCommand{%
+    \hspace{1pt}%
+    {\color{PineGreen}\vrule width 2pt}%
+    {\color{defshade}\vrule width 4pt}%
+    \colorbox{defshade}%
+  }%
+  \MakeFramed{\advance\hsize-\width\FrameRestore}%
+  \noindent\hspace{-4.55pt}% disable indenting first paragraph
+  \begin{adjustwidth}{}{7pt}%
+  \vspace{2pt}\vspace{2pt}%
+}
+{%
+  \vspace{2pt}\end{adjustwidth}\endMakeFramed%
+}
+%Cadre Notation (4/8)------------------------------
+\newenvironment{formal_not}{%
+  \def\FrameCommand{%
+    \hspace{1pt}%
+    {\color{LimeGreen}\vrule width 2pt}%
+    {\color{defshade}\vrule width 4pt}%
+    \colorbox{defshade}%
+  }%
+  \MakeFramed{\advance\hsize-\width\FrameRestore}%
+  \noindent\hspace{-4.55pt}% disable indenting first paragraph
+  \begin{adjustwidth}{}{7pt}%
+  \vspace{2pt}\vspace{2pt}%
+}
+{%
+  \vspace{2pt}\end{adjustwidth}\endMakeFramed%
+}
+%Cadre théoreme (5/8)------------------------------
+\newenvironment{formal_thm}{%
+  \def\FrameCommand{%
+    \hspace{1pt}%
+    {\color{violet}\vrule width 2pt}%
+    {\color{thmshade}\vrule width 4pt}%
+    \colorbox{thmshade}%
+  }%
+  \MakeFramed{\advance\hsize-\width\FrameRestore}%
+  \noindent\hspace{-4.55pt}% disable indenting first paragraph
+  \begin{adjustwidth}{}{7pt}%
+  \vspace{2pt}\vspace{2pt}%
+}
+{%
+  \vspace{2pt}\end{adjustwidth}\endMakeFramed%
+}
+%Cadre proposition (6/8)------------------------------
+\newenvironment{formal_prop}{%
+  \def\FrameCommand{%
+    \hspace{1pt}%
+    {\color{Thistle}\vrule width 2pt}%
+    {\color{thmshade}\vrule width 4pt}%
+    \colorbox{thmshade}%
+  }%
+  \MakeFramed{\advance\hsize-\width\FrameRestore}%
+  \noindent\hspace{-4.55pt}% disable indenting first paragraph
+  \begin{adjustwidth}{}{7pt}%
+  \vspace{2pt}\vspace{2pt}%
+}
+{%
+  \vspace{2pt}\end{adjustwidth}\endMakeFramed%
+}
+%Cadre sol (7/8)------------------------------
+\newenvironment{formal_sol}{%
+  \def\FrameCommand{%
+    \hspace{1pt}%
+    {\color{BurntOrange}\vrule width 2pt}%
+    {\color{solshade}\vrule width 4pt}%
+    \colorbox{solshade}%
+  }%
+  \MakeFramed{\advance\hsize-\width\FrameRestore}%
+  \noindent\hspace{-4.55pt}% disable indenting first paragraph
+  \begin{adjustwidth}{}{7pt}%
+  \vspace{2pt}\vspace{2pt}%
+}
+{%
+  \vspace{2pt}\end{adjustwidth}\endMakeFramed%
+}
+%Cadre indication (8/8)------------------------------
+\newenvironment{formal_ind}{%
+  \def\FrameCommand{%
+    \hspace{1pt}%
+    {\color{Dandelion}\vrule width 2pt}%
+    {\color{solshade}\vrule width 4pt}%
+    \colorbox{solshade}%
+  }%
+  \MakeFramed{\advance\hsize-\width\FrameRestore}%
+  \noindent\hspace{-4.55pt}% disable indenting first paragraph
+  \begin{adjustwidth}{}{7pt}%
+  \vspace{2pt}\vspace{2pt}%
+}
+{%
+  \vspace{2pt}\end{adjustwidth}\endMakeFramed%
+}
+
+%%%[1.2.4] Racourci pour utiliser les cadres %%%
+%\coldef, définition
+\newcommand{\coldef}[1]{\begin{formal_def}
+    \begin{definition}
+        #1
+    \end{definition}
+\end{formal_def}}
+%\q, question
+\newcommand{\q}[1]{\begin{formal_def} 
+    \begin{question}
+        #1
+    \end{question}
+\end{formal_def}}
+%\colregle, regle
+\newcommand{\colregle}[1]{\begin{formal_regle}
+    \begin{regle}
+        #1
+    \end{regle}
+\end{formal_regle}}
+%\colnot, notation
+\newcommand{\colnot}[1]{\begin{formal_not}
+    \begin{notation}
+        #1
+    \end{notation}
+\end{formal_not}}
+%\colthm, théorème
+\newcommand{\colthm}[1]{\begin{formal_thm}
+    \begin{thm}
+        #1
+    \end{thm}
+\end{formal_thm}}
+%\colprop, proposition
+\newcommand{\colprop}[1]{\begin{formal_prop}
+    \begin{prop}
+        #1
+    \end{prop}
+\end{formal_prop}}
+%\colsol, solution
+\newcommand{\colsol}[1]{\begin{formal_sol}
+    \begin{sol}
+        #1
+    \end{sol}
+\end{formal_sol}}
+%\colind, indication
+\newcommand{\colind}[1]{\begin{formal_ind}
+    \begin{ind}
+        #1
+    \end{ind}
+\end{formal_ind}}
+
+%%%[1.2.5] Autres commandes personnalisées %%%
+\newcommand{\g}[1]{\og #1 \fg{}} %guillements
+\newcommand{\R}{\mathbb{R}} %ensemble réel
+\newcommand{\Q}{\mathbb{Q}} %ensemble rationel
+\newcommand{\Z}{\mathbb{Z}} %ensemble entier
+\newcommand{\N}{\mathbb{N}} %ensemble naturel
+\newcommand\eqdef{\, \widehat{=} \, }
+\newcommand{\notiff}{% si et seulement si barré
+  \mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\dom}[1]{\mathcal{D}_{#1}} %Domaine de f
+\newcommand{\com}[1]{\textcolor{Gray}{(#1)}} %commentaire affiché
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+
+%%%[1.3]Environnement pour la physique%%%
+%%[1.3.1] Diagrammes de Feynman%%
+\usepackage{tikz-feynman}
+
+%%[1.3.2] Dessins, schémas et graphiques%%
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\usetikzlibrary{intersections,angles,quotes}
+\usepgfplotslibrary{fillbetween}
+
+
+\usepackage{cleveref} %avoir de chouettes réferences internes
+\crefname{table}{table}{tables}
+\Crefname{table}{Table}{Tables}
+\crefname{figure}{figure}{figures}
+\Crefname{figure}{Figure}{Figures}
+\crefname{equation}{eq.}{équations}
+\Crefname{equation}{Eq.}{Equations}
+%%[1.3.3]Code
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour},   commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
+
+
+%%%[1.4] Informations%%%
+\author{Téo Bruffart, Black Bloc de génération en génération ernAntoine Dierckx, Vicomte de Casterlé}
+\date{Février 2024}
+
+%%%%[2]DOCUMENTS%%%%
+\begin{document}
+    
+\begin{titlepage}
+    \begin{center}
+        \HRule
+        \vspace*{0.5cm}
+        
+        \Huge
+        \textbf{Simulation de l'interaction $e^+e^-\rightarrow q\bar q g$}
+        \HRule
+        
+        \vspace{.5cm}
+        \Large
+        PHYS-F477 : Physique des interactions fortes
+
+        
+        \vspace{.5cm}
+        \LARGE
+        \textbf{Antoine Dierckx \& Téo Bruffaerts}
+
+        \vspace{.5cm}
+
+        \includegraphics[width=0.92\textwidth]{Images/h_xxz.pdf}%MIX/h_sigmax1.pdf}
+
+        \vspace{.0cm}
+
+        \LARGE
+        Supervisé par Max Vanden Bemden
+
+        \vspace{0.2cm}
+            
+        \large
+        IIHE
+
+        \vspace{0.2cm}
+        ULB, Belgique\\
+        2024
+
+
+        
+        \includegraphics[width=0.2\textwidth]{Images/Logo_iihe.png}\hspace{9cm}\includegraphics[width=0.2\textwidth]{Images/Logo_ULB.png}
+        
+    \end{center}
+
+\end{titlepage}
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+Dans ce rapport, nous allons étudier le processus $e^+e^- \rightarrow  q \Bar{q} g$. Il s'agit d'une correction radiative QCD au processus $e^+e^- \rightarrow  q \Bar{q}$.\\
+Après une brève introduction, nous rappellerons quelques résultats théoriques sur l'expression des différents éléments de matrices ainsi que sur le calcul de la section efficace. Nous préciserons les approximations nécessaires à la simplification des expressions obtenues. Ensuite, nous détaillerons les étapes permettant la simulation de ce processus, et analyserons les résultats de cette simulation. Enfin, nous terminerons avec un commentaire concernant le processus inverse et une courte conclusion. 
+
+
+\subsection{Correction radiative}
+Le but de notre analyse est de simuler l'interaction $e^+e^- \rightarrow  q \Bar{q} g$. Au \textit{tree level}, quatre diagrammes peuvent contribuer:
+\begin{center}
+\minipage{.45\textwidth}
+    \begin{figure}[H]
+    \centering
+\begin{tikzpicture}[scale=.7]
+    \begin{feynman}
+        \vertex (b) at (0,0);
+        \vertex (a1) at ($(b) + (-2,2)$){\(e^+ \)};
+        \vertex (a2) at ($(b) + (-2,-2)$){\( e^-\)};
+        \vertex (c) at ($(b) + (2,0)$);
+        \vertex (d1) at ($(c) + (2,2)$){\( q \)};
+        \vertex (d2) at ($(c) + (2,-2)$){\( \overset{\_}{q} \)};
+        \vertex (e1) at ($(c) + (0.5,0.5)$);
+        \vertex (e2) at ($(e1) + (1.5,-0.5)$){\( g\)};
+
+        \diagram* {
+        (a1) -- [anti fermion] (b),
+        (a2) -- [fermion] (b),
+        (b) -- [boson, edge label = \( \gamma \text{ ou } Z \)] (c),
+        (c) -- [anti fermion] (d2),
+        (c) -- [fermion] (d1),
+        (e1) --[gluon] (e2),
+      };
+    \end{feynman}
+\end{tikzpicture}
+\end{figure}
+\endminipage
+\hspace{.0333\textwidth}
+\minipage{.45\textwidth}
+    \begin{figure}[H]
+    \centering
+\begin{tikzpicture}[scale=.7]
+    \begin{feynman}
+        \vertex (b) at (0,0);
+        \vertex (a1) at ($(b) + (-2,2)$){\(e^+ \)};
+        \vertex (a2) at ($(b) + (-2,-2)$){\( e^-\)};
+        \vertex (c) at ($(b) + (2,0)$);
+        \vertex (d1) at ($(c) + (2,2)$){\( q \)};
+        \vertex (d2) at ($(c) + (2,-2)$){\( \overset{\_}{q} \)};
+        \vertex (e1) at ($(c) + (0.5,-0.5)$);
+        \vertex (e2) at ($(e1) + (1.5,0.5)$){\( g\)};
+
+        \diagram* {
+        (a1) -- [anti fermion] (b),
+        (a2) -- [fermion] (b),
+        (b) -- [boson, edge label = \( \gamma \text{ ou } Z \)] (c),
+        (c) -- [anti fermion] (d2),
+        (c) -- [fermion] (d1),
+        (e1) --[gluon] (e2),
+      };
+    \end{feynman}
+\end{tikzpicture}
+\end{figure}
+\endminipage
+\end{center}
+Nous allons effectuer un certain nombre d'approximations afin de simplifier l'élément de matrice et obtenir une simulation générée avec un nombre limité de variables aléatoires.\\
+Remarquons que ce processus est une correction radiative QCD à l'interaction $e^+e^- \rightarrow  q \Bar{q}$. On considère un faisceau d'électrons ayant une énergie de $E_\text{beam} = 10$ GeV dans le référentiel du laboratoire. Ainsi, l'énergie dans le centre de masse est donnée par :
+\begin{align*}
+\sqrt{s} \approx \sqrt{4 E_\text{beam}^2} = 2 E_\text{beam} = 20 \text{ GeV}
+\end{align*}
+On peut alors négliger la contribution des diagrammes où un boson $Z$ est échangé car nous sommes éloigné de son pic de masse ($\sqrt{s} << m_Z \approx 91 $ GeV). On peut également négliger la masse des électrons ($\sqrt{s} >> m_e \approx 0.511 $ GeV). Il est possible de montrer \cite{Matrice_tree_main} que l'élément de matrice au \textit{tree level} sans correction peut s'écrire comme :
+\begin{align}
+    \overline{|\mathcal{M}|^2} = 8 \frac{(4 \pi )^2 \alpha ^2 }{s^2}N_C Q_q^2\left\{ (p_{q}\cdot p_{e^+}) (p_{\overline{q}}\cdot p_{e^-}) +  (p_{q}\cdot p_{e^-}) (p_{\overline{q}}\cdot p_{e^+}) + m_q^2 (p_{e^+}\cdot p_{e^-})  \right\}
+\end{align}
+où $\alpha = e^2/4 \pi $ et $N_C = 3$ est le nombre de couleurs. \\
+Le calcul de la section efficace pour  la correction radiative étant un problème à 3 corps, il nécessite un peu plus de travail.
+
+\subsection{Calcul de la section efficace $e^+e^- \rightarrow  q \Bar{q} g$}
+Afin de déterminer la section efficace différentielle de ce processus, nous effectuons un changement de coordonnées bien choisi pour nous placer dans un repère adapté.
+\paragraph{Paramétrisation de l'espace des phases}
+\mbox{}
+\coldef{
+On définit la fraction d'impulsion $x_i$ d'une particule $i$ de l'état final selon :
+\begin{align}
+    x_i \eqdef \frac{2}{\sqrt{s}}E_i
+\end{align}
+}
+Le facteur d'espace des phases s'exprime alors comme :
+\begin{align*}
+    d\Phi_3 = (2 \pi)^4 \delta^{(4)}(p_{e^+} + p_{e^-} - p_{q} - p_{\overline{q}} - p_g ) \prod_{i = 1}^3 \frac{s}{8 (2 \pi)^3}x_i dx_i d \cos \theta_i d\phi_i
+\end{align*}
+\paragraph{Changement de référentiel}
+Dans le référentiel du laboratoire $(x,y,z)$, le faisceau d'électrons arrive selon $\Vec{u_z}$ et le faisceau de positrons selon $-\Vec{u_z}$. Afin de simplifier les calculs, nous nous plaçons un référentiel $(X,Y,Z)$ dans lequel le gluon est émis selon $\Vec{u_X}$.
+\coldef{
+On introduit les trois angles d'Euler suivants:
+\begin{align*}
+    &\alpha \, \in [0, 2 \pi ]\text{ le premier angle de rotation autour de l'axe } z \\
+    &\beta \, \in [0,  \pi ]\text{ l'angle de rotation autour de l'axe } x \\
+    &\gamma \, \in [0, 2 \pi ]\text{ le second angle de rotation autour de l'axe } z 
+\end{align*}
+}
+Dans ce nouveau référentiel $(X,Y,Z)$, on introduit les angles suivants.
+\coldef{
+\begin{align*}
+    &\theta_1 \in [0, \pi ] \text{ l'angle entre le quark et le gluon}\\
+    &\theta_2 \in [0, \pi ] \text{ l'angle entre l'antiquark et le gluon}\\
+    &\phi_2 \in [0, 2 \pi ]\text{ l'angle entre la paire quark-antiquark}
+\end{align*}
+}
+Il est possible de montrer \cite{Sol_ee-qqg} par quelques calculs triviaux qu'on obtient les conditions suivantes :
+\begin{align}
+    \cos \theta_1 &= - \frac{x_1^2 + x_3^2 - x_2^2}{2x_1 x_3} \label{eq:costheta1}\\
+    \cos \theta_2 &= - \frac{x_2^2 + x_3^2 - x_1^2}{2x_2 x_3} \label{eq:costheta2}\\
+    x_1 + x_2 + x_3 &= 2 \label{condition_xi}\\
+    \phi_2 &= \pi
+\end{align}
+où $x_{1,2,3}$ sont respectivement les fractions d'énergie du quark, de l'antiquark et du gluon. On obtient également que la section efficace différentielle est donnée par :
+\begin{equation}\label{section_efficace}
+    \frac{d\sigma}{d\alpha dx_1 dx_2 d \cos \beta d \gamma} = \frac{C_F \alpha_\text{EM}^2 \alpha_s N_c Q_q^2}{4 \pi^2}\left\{ 
+    \frac{x_1^2 \big( 1 + \sin^2(\beta) \sin^2 (\gamma + \theta_1) \big) + x_2^2 \big( 1 + \sin^2(\beta) \sin^2 (\gamma - \theta_2) \big)}{s (1- x_1)(1 - x_2)}
+    \right\}
+\end{equation}
+\subsection{Signification des divergences}
+Dans l'expression \eqref{section_efficace}, on observe des divergences en $x_1 = 1$ et en $x_2 = 1$. Puisque les $\{ x_i \}$ répondent à la relation \eqref{condition_xi}, deux types de divergences sont possibles:%\footnote{voir page 58 du cours, équations 3.90}
+\begin{itemize}
+    \item Lorsque soit $x_1 \rightarrow 1$, soit $x_2 \rightarrow 1$, il y a émission d'un \textit{gluon colinéaire} à la particule dont la fraction d'impulsion tend vers 1.
+    \item Lorsque les deux fractions d'impulsion $x_1$ et $x_2$ tendent vers 1 simultanément, on a $x_3 \rightarrow 0$: il y a émission d'un \textit{gluon soft}.
+\end{itemize}
+
+\newpage
+\section{Explication du code}
+Cette partie est dédiée aux détails de l'implémentation de la simulation de l'interaction $e^+e^- \rightarrow  q \Bar{q} g$. Le code peut être retrouvé dans son intégralité dans l'annexe \ref{code_tp5}.
+
+\remark{La simulation a été effectuée séparément pour des quarks de charges $Q_\uparrow = 2/3$ (simulation \textit{up}) et $Q_\downarrow = -1/3$ (simulation \textit{down}), puis sur un ensemble contenant une moitié de $Q_\uparrow$ et une moitié de $Q_\downarrow$ (simulation \textit{mix}). \\
+Lors de la création de la paire $q-\bar{q}$ à partir d'un photon, la probabilité d'obtenir une paire $u-\bar{u}$, $d-\bar{d}$, $c-\bar{c}$ et $s-\bar{s}$ est la même. Les paires $t-\bar{t}$ et $b-\bar{b}$ ne peuvent pas être produites car l'énergie dans le centre de masse $\sqrt{s}$ est insuffisante.\\
+Le code commenté ci-dessous est issus de la simulation \textit{down}.}
+
+\subsection{Changement de référentiel}
+Le changement de référentiel s'effectue principalement dans cette partie:
+\lstinputlisting[language=C++, caption =Fonction myRotate, firstline=29, lastline=48]{Codes/code_down.cc}
+La fonction \textit{myRotate} effectue les rotations inverses à celles utilisées pour calculer la section efficace afin de revenir dans le référentiel du laboratoire. Dans la figure \ref{fig:rotations}, on peut voir qu'il suffit de reproduire les 3 rotations comme suit :une rotation de $-\gamma$ autour de $Z$, une rotation de $-\beta$ autour de $x''$ et finalement une rotation de $-\alpha$ autour de $z'$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{Images/rotations.png}
+    \begin{minipage}{12cm}
+        \usebox0
+        \caption{Représentation des 3 rotations afin de passer du référentiel du laboratoire à celui du centre de masse du système \cite{Sol_ee-qqg}.}
+        \label{fig:rotations}
+    \end{minipage}
+\end{figure}
+
+\newpage
+\subsection{Variables générées et section efficace}
+Les variables sont générées dans la section suivante:
+\lstinputlisting[language=C++, caption =Variables générées, firstline=111, lastline=126]{Codes/code_down.cc}
+
+On génère les fractions d'énergie du quark et de l'antiquark, $x_1$ et $x_2$, ce qui donnera également la fraction d'énergie du gluon, $x_3$, par conservation d'énergie. Pour ce faire, on va générer uniformément des variables $y_{1,2}$ puis faire un changement de variable ($y_i=-\log(1-x_i)$) afin de retrouver les $x_{1,2}$. Ce changement de variable sera décrit plus explicitement dans la section \ref{sec:x1x2_rec}.\\
+Pour compenser la génération non-uniforme des fractions d'énergie, on multiplie simplement la section efficace par le déterminent de la Jacobienne du changement de variable. Cela va principalement permettre d'augmenter l'efficacité de notre méthode de réjection en passant de $\sim1\times10^{-4}\%$ à $\sim 56\%$ d'efficacité.\\
+\\
+On va également générer les angles d'Euler suivants : $\alpha$, $\cos \beta$ et $\gamma$. 
+\remark{
+On génère $\cos \beta$ plutôt que $\beta$ car c'est bien $\cos \beta$ qui apparaît dans la section efficace différentielle.
+}
+
+\subsection{Méthode de réjection}
+On va ensuite utiliser une méthode de réjection afin de sélectionner nos évènements.\\
+Dans notre code cela se traduit par :
+\lstinputlisting[language=C++, firstline=124, lastline=124]{Codes/code_down.cc}
+On commence par générer une valeur maximale \textit{fmax} comme notre maximum de section efficace \textit{sigmaMax}, pondérée par une variable aléatoire entre 0 et 1.\\
+\lstinputlisting[language=C++, firstline=147, lastline=151]{Codes/code_down.cc}
+Afin d'obtenir ce maximum de section efficace, on compare chaque valeur de notre section efficace différentielle qui dépend des variables générées $x_1$, $x_2$, $\beta$ et $\gamma$ (et multipliée par un facteur $(1-x_1)(1-x_2)$ dû au changement de variable) à ce maximum \textit{sigmaMax} et on le remplace si l'on obtient des valeurs supérieures. Cela va permettre d'affiner notre valeur de \textit{sigmaMax}.\\
+\\
+\lstinputlisting[language=C++, caption =Implémentation de \textit{fmax} et Méthode de réjection, firstline=152, lastline=153]{Codes/code_down.cc}
+La méthode de réjection consiste alors à ce que l'on peut appeler du \textit{Hit and Miss}. Pour toute valeur \textit{Sigma} obtenue ci-dessus, si celle-ci est bien inférieure à \textit{fmax}, l'évènement est accepté et l'itération peut continuer. Dans le cas contraire, l'évènement est rejeté et l'on perd en efficacité. Dans notre cas, en partant de $5\times 10^6$ évènements, notre efficacité finale est de $\sim56\%$.
+
+
+\subsection{Niveau généré et reconstruit}
+Nous allons classer les données issues des simulations dans deux types de \g{niveaux}:
+\coldef{
+\begin{itemize}
+\item[] 
+    \item On désigne par \g{\textbf{niveau généré}} le niveau d'analyse avant l'interaction des particules avec le détecteur.
+    \item On désigne par \g{\textbf{niveau reconstruit}} le niveau d'analyse après la simulation de l'interaction des particules avec le détecteur et le processus de reconstruction.
+\end{itemize}
+}
+Au niveau généré, nous savons quelle impulsion correspond à quelle particule. Cependant, au niveau reconstruit, seules les signatures peuvent nous indiquer la nature d'une particule. Ici, nous nous contenterons de d'attribuer les impulsions aux particules de la manière suivante:
+\lstinputlisting[language=C++, caption =Variables reconstruites, firstline=154, lastline=157]{Codes/code_down.cc}
+Cela permet de labéliser les fractions d'énergie du niveau généré de telle sorte que \mbox{$x_1>x_2>x_3$} au niveau reconstruit.
+
+\subsection{Angle de Ellis-Karliner $\theta_\text{EK}$}
+La définition de l'angle de Ellis-Karliner $\theta_\text{EK}$ peut être trouvée ici \cite{Cours-QCD} et est la suivante:
+\coldef{
+L'angle de Ellis-Karliner $\theta_\text{EK}$ est définit selon
+\begin{equation}
+    \cos \theta_\text{EK} = \frac{x_2 - x_3}{x_1}
+    \label{eq:thetaEK}
+\end{equation}
+}
+\textquote{L'angle de Ellis-Karliner $\theta_\text{EK}$ représente l'angle entre les jets 1 et 2 dans le référentiel au repos du système constitué des jets 2 et 3. Cette variable permet de mettre en évidence le caractère vectoriel dans l'émission de gluon.} \cite{Cours-QCD}\\
+\\
+Dans le code, on applique simplement sa définition au niveau reconstruit :
+\lstinputlisting[language=C++, firstline=158, lastline=158]{Codes/code_down.cc}
+L'interprétation physique de cette angle sera faite en même temps que l'analyse des résultats de la simulation dans la section \ref{sec:theta_EK}.
+
+\subsection{Algorithme JADE}
+La définition de l'algorithme JADE peut être trouvée ici \cite{Cours-QCD}\footnote{Point 3.9.1, page 64}. Rappelons la ici.\\
+Soit $p_i$ la quadri-impulsion d'une particule $i$, et $y_\text{cut} \in [0, 1]$ un paramètre. Si la masse invariante de la paire de particule $i-j$ est telle que
+\begin{align*}
+    M_{ij}^2 < y_\text{cut} \cdot s
+\end{align*}
+alors ces deux particules sont considérées comme appartenant au même jet, et on définit la pseudo-particule $p_{ij} \eqdef p_i + p_j$. On réitère alors la procédure avec toutes paires possibles.\\
+Le but de cet algorithme va donc être de déterminer le nombre de jets par évènement. Prenons un exemple :\\
+Supposons que l'on aie les 3 particules de l'état final comme labellisées par 1, 2 et 3. On démarre donc avec 3 jets. L'algorithme commence par associer les particules deux par deux (par exemple 1-2 puis 2-3 puis 1-3). S'il obtient pour une valeur choisie de $y_\text{cut}$ que le carré de leur masse invariante donné par $M^2_{ij} = (p_i+p_j)^2$ est inférieur à $y_\text{cut}s$, il va combiner ces deux particules en une seule. Pour notre exemple, supposons que ce soit le cas pour la paire de particules 2-3. On n'a alors plus que 2 jets. L'algorithme va donc ensuite regarder le carré de la masse invariante du système composé de notre nouvelle particule 2-3 et de la particules 1. Si cette masse invariante est telle que son carré est de nouveau inférieur à $y_\text{cut}s$, la troisième particule va être combinée avec les deux autres et il ne restera plus qu'un seul jet.\\
+\\
+Dans le code, l'implémentation de l'algorithme va se faire de la manière suivant :
+\lstinputlisting[language=C++, caption=Définitions des masses invariantes et algorithme JADE, firstline=167, lastline=186]{Codes/code_down.cc}
+
+\newpage
+\section{Analyse des graphes}
+Cette partie est dédiée à l'analyse des graphes issus de la simulation. Lorsque ce que ce sera pertinent, ils seront comparés avec ceux vu au cours \cite{Cours-QCD}.
+\remark{L'analyse présentée dans cette section prend pour exemple la simulation \textit{up} générant des quarks de charge $+2/3$. Lorsque des différences se manifestent avec la simulation \textit{down} générant des quarks de charges $-1/3$, ou la simulation \textit{mix}, nous l'indiquerons.}
+
+\subsection{Cosinus des angles $\theta_q$ et $\theta_{\bar q}$ dans le référentiel du centre de masse}
+On peut voir dans les graphes des figures \ref{fig:costheta_q} et \ref{fig:costheta_antiq} les distributions des angles de diffusion entre le quark (respectivement l'antiquark) et le gluon. Pour rappel, ceux-ci sont donnés par les équations \eqref{eq:costheta1} et \eqref{eq:costheta2} et dépendent donc des fractions d'énergie des particules de l'état final générées. On retrouve bien ici une distribution en cosinus pour $\theta_q$ et $\theta_{\bar q}$ :
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = .7\textwidth]{Up/h_cosThetaQuark.pdf}
+    \begin{minipage}{12cm}
+        \usebox0
+        \caption{Distribution de $\cos\theta_q$ entre -1 et 1 définit par les fractions de masses des particules où $\theta_q$ est l'angle entre le quark de charge 2/3 et le gluon dans le référentiel du centre de masse du système.}
+        \label{fig:costheta_q}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = .7\textwidth]{Up/h_cosThetaAntiq.pdf}
+    \begin{minipage}{12cm}
+        \usebox0
+        \caption{Distribution de $\cos\theta_{\bar q}$ entre -1 et 1 définit par les fractions de masses des particules où $\theta_{\bar q}$ est l'angle entre l'antiquark de charge -2/3 et le gluon dans le référentiel du centre de masse du système.}
+        \label{fig:costheta_antiq}
+    \end{minipage}
+\end{figure}
+
+\subsection{Les 3 angles d'Euler}
+
+À part les fractions d'énergie des particules de l'état final, les autres variables générées uniforméments sont les angles d'Euler de rotations autour des axes du référentiel du laboratoire. En particulier, on génère ici entre 0 et $2\pi$ les angles $\alpha$ et $\gamma$, et pour $\beta$ on génère son cosinus entre -1 et 1 (dont dépendra explicitement la section efficace différentielle de l'interaction).\\
+Les diagrammes des figures \ref{fig:alpha}, \ref{fig:gamma} et \ref{fig:cosbeta} montrent respectivement les générations uniformes de $\alpha$, $\gamma$ et $\cos\beta$ ce qui permet d'obtenir la distribution en $\arccos{x}$ pour $\beta$ dans le diagramme de la figure \ref{fig:beta} :
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = .7\textwidth]{Up/h_alpha.pdf}
+    \begin{minipage}{12cm}
+        \usebox0
+        \caption{Distribution de l'angle d'Euler $\alpha$ généré uniformément entre 0 et $2\pi$.}
+        \label{fig:alpha}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = .7\textwidth]{Up/h_beta.pdf}
+    \begin{minipage}{12cm}
+        \usebox0
+        \caption{Distribution de l'angle d'Euler $\beta$ généré uniformément par $\cos\beta$ entre -1 et 1.}
+        \label{fig:beta}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = .7\textwidth]{Up/h_gamma.pdf}
+    \begin{minipage}{12cm}
+        \usebox0
+        \caption{Distribution de l'angle d'Euler $\gamma$ généré uniformément entre 0 et $2\pi$.}
+        \label{fig:gamma}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = .7\textwidth]{Up/h_cosBeta.pdf}
+    \begin{minipage}{12cm}
+        \usebox0
+        \caption{Distribution de $\cos\beta$ généré uniformément -1 et 1.}
+        \label{fig:cosbeta}
+    \end{minipage}
+\end{figure}
+
+\subsection{Fractions d'énergie $x_1$ et $x_2$ au niveau reconstruit}\label{sec:x1x2_rec}
+
+Pour rappel, au niveau reconstruit, les fractions d'énergies sont assignées aux particules de sorte que $x^\text{rec}_1>x^\text{rec}_2>x^\text{rec}_3$. \\
+De plus, afin d'éviter les divergences évoquées précédemment, nous définissons une borne supérieure et inférieure pour $x_1$ et $x_2$:
+\begin{align*}
+    \epsilon_x = 5.10^{-5} \text{ et } x_\text{min} \eqdef \epsilon_x \text{ , } x_\text{max} \eqdef 1 - \epsilon_x
+\end{align*}
+Par ailleurs, les $\{x_i\}$ remplissent la condition \eqref{condition_xi}. On a alors les propriétés suivantes:
+\colprop{
+\begin{align*}
+    x^\text{rec}_1 \geq \frac{2}{3}\\
+    x^\text{rec}_2 \geq \frac{1}{2}
+\end{align*}
+}
+\proof{\begin{itemize}
+    \item $x_1^\text{rec}$ est minimal lorsque $x_1^\text{rec} = x_2^\text{rec} = x_3^\text{rec}$. Or, $x_1 + x_2 + x_3 = 2$ Ainsi, $x_{1, \text{min}}^\text{rec} = \frac{2}{3}$
+\item $x_2^\text{rec}$ est minimal lorsque $x^\text{rec}_1 = 1$ et $x_2 = x_3$. Ainsi, $x_{2, \text{min}}^\text{rec} = \frac{1}{2}$
+\item[] 
+\end{itemize}
+\qed}
+
+Cependant, nous avons effectué un changement de variable qui affecte la distribution des $\{x_i\}$. Nous avons effectué
+\begin{align*}
+    y_i = -\ln{(x_i-1)} \iff x_i = 1 - e^{-y_i}
+\end{align*}
+Les bornes minimales et maximales sont maintenant données par $y_{i,\text{min}} = - \ln{(1 - x_{i,\text{min}})}$ et $y_{i,\text{max}} = - \ln{(1 - x_{i,\text{max}})}$. \\
+On observe bien, dans la figure \ref{fig:x1} (resp. la figure \ref{fig:x2}), une distribution piquée autour de 1, et nulle en deça de $2/3$ (resp. en deça de $1/2$).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = .6\textwidth]{Up/h_x1.pdf}
+    \begin{minipage}{12cm}
+        \usebox0
+        \caption{Distribution de la fraction d'énergie $x^\text{rec}_1$ }
+        \label{fig:x1}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = .6\textwidth]{Up/h_x2.pdf}
+    \begin{minipage}{12cm}
+        \usebox0
+        \caption{Distribution de la fraction d'énergie $x_2^\text{rec}$}
+        \label{fig:x2}
+    \end{minipage}
+\end{figure}
+
+\subsection{Corrélations entre les $x_1$, $x_2$ et $x_3$}
+
+Afin d'observer l'impact des conditions imposées par le passage au niveau reconstruit et par la conservation de l'énergie, on peut analyser les diagrammes des figures \ref{fig:x1x2} et \ref{fig:x1x2x3}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = .7\textwidth]{Up/h_x1x2.pdf}
+    \begin{minipage}{12cm}
+        \usebox0
+        \caption{Diagramme de corrélation entre $x_1^\text{rec}$ et $x_2^\text{rec}$}%les deux fractions générées par une distribution en exponentielle puis passées au niveau reconstruit avec $x_1>x_2$ pour chaque évènement.}
+        \label{fig:x1x2}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = .7\textwidth]{Up/h_xxx.pdf}
+    \begin{minipage}{12cm}
+        \usebox0
+        \caption{Diagramme de corrélation entre $x_1^\text{rec}$, $x_2^\text{rec}$ et $x_3^\text{rec}$}%les trois fractions d'énergies des particules de l'état final au niveau reconstruit avec $x_1>x_2>x_3$ pour chaque évènement.}
+        \label{fig:x1x2x3}
+    \end{minipage}
+\end{figure}
+
+Pour résumer, nous avons 3 conditions sur les fractions d'énergie, données par :
+\begin{align}
+    &x_1+x_2+x_3 = 2 \ \text{\com{conservation de l'énergie}}
+    \label{eq:cdt1}\\
+    &x_1>x_2>x_3
+    \label{eq:cdt2}\\
+    &x_{1,2,3} \in [x_{\text{min}},1-x_{\text{min}}]
+    \label{eq:cdt3}
+\end{align}
+Graphiquement, cela nous mets des droites limites excluant des parties des diagrammes.\\
+De plus, la concentration importante d'évènements générés ayant $x_1^\text{rec}$ proche de 1 et $x_2^\text{rec}$ maximal reflète le changement de variable effectué.
+
+
+\subsection{$\theta_{EK}$, l'angle d'Ellis-Karliner}\label{sec:theta_EK}% \com{voir p.60 du cours}}
+
+L'angle de Ellis-Karliner est définit par l'équation \eqref{eq:thetaEK} et dépend donc des fractions d'énergie. Au niveau reconstruit, cette angle représente l'angle entre les deux jets (de plus haute énergie s'il y a 3 jets) dans le référentiel de centre de masse du système. On observe dans le diagramme de la figure \ref{fig:thetaEK} que la distribution de son cosinus est fort piquée en $\cos\theta_{EK} = 1$.\\
+Puis que $x_2^\text{rec} < x_1^\text{rec} $, la seule manière d'obtenir $\frac{x^\text{rec}_2 - x^\text{rec}_3}{x^\text{rec}_1} \rightarrow 1$ est le cas où $x_1^\text{rec} = x_2^\text{rec} = 1$ et $x_3^\text{rec} = 0$. %ce qui correspond au cas où $x_1\rightarrow1$ et $x_2\rightarrow0$.
+En comparant avec les résultats basés sur la théorie \cite{Cours-QCD}%\footnote{diagrammes p.60}
+, on peut voir que la distribution obtenue ici confirme le caractère vectoriel des gluons.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.7\textwidth]{Up/h_cosThetaEK.pdf}
+    \begin{minipage}{12cm}
+        \usebox0
+        \caption{Distribution de l'angle d'Ellis-Karliner, $\theta_{EK}$, entre les deux jets de plus haute énergie dans le centre de masse du système au niveau reconstruit.}
+        \label{fig:thetaEK}
+    \end{minipage}
+\end{figure}
+
+\newpage
+\subsection{Corrélation entre la section efficace $\sigma$ en la fraction d'énergie $x^\text{rec}_1$}
+Contrairement aux sections précédentes, la charge du quark influence la section efficace, et donc à fortiori sa corrélation avec $x_1^\text{rec}$. On retrouve les diagrammes de corrélation issus de la simulation dans les figures \ref{fig:sigmax1} et \ref{fig:sigmax1_combine}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = .49\textwidth]{Up/h_sigmax1.pdf}
+    \includegraphics[width = .49\textwidth]{Down/h_sigmax1.pdf}
+    \begin{minipage}{12cm}
+        \usebox0
+        \caption{Diagrammes de la corrélation entre section efficace totale $\sigma$ et la fraction d'énergie $x^\text{rec}_1$, dans la simulation \textit{up} à gauche et \textit{down} à droite.}
+        \label{fig:sigmax1}
+    \end{minipage}
+    \centering
+    \includegraphics[width = .49\textwidth]{MIX/h_sigmax1.pdf}
+    \caption{Diagramme de la corrélation entre section efficace totale $\sigma$ et la fraction d'énergie $x^\text{rec}_1$ dans la simulation \textit{mix}}
+    \label{fig:sigmax1_combine}
+\end{figure}
+Dans les 3 cas, on observe une densité d'évènement plus élevée pour de grande valeurs de $x^\text{rec}_1$, ce qui est cohérent avec le changement de variable visible sur la figure \ref{fig:x1}.\\
+On observe également une relation linéaire entre $x^\text{rec}_1$ et $\sigma$. De plus, un zone d'exclusion apparaît pour de faible valeurs de $\sigma$.\\
+Enfin, on observe un décalage du diagramme de corrélation vers la gauche pour une quark de type \textit{down}, ce qui est en accord avec l'expression de la section efficace, celle-ci étant multipliée par $Q_q^2$.
+
+\newpage
+\subsection{Algorithme de JADE}
+\minipage{.45\textwidth}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = .7 \textwidth]{Up/h_jet_ycut1.pdf}
+    \begin{minipage}{5cm}
+        \usebox0
+        \caption{Nombre de jets pour $y_\text{cut} = 0.00001$}
+        \label{fig:enter-label}
+    \end{minipage}
+\end{figure}
+
+\endminipage
+\vspace{.0333\textwidth}
+\minipage{.45\textwidth}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = .7 \textwidth]{Up/h_jet_ycut2.pdf}
+    \begin{minipage}{5cm}
+        \usebox0
+        \caption{Nombre de jets pour $y_\text{cut} = 0.001$}
+        \label{fig:enter-label}
+    \end{minipage}
+\end{figure}
+
+\endminipage
+
+\minipage{.45\textwidth}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = .7 \textwidth]{Up/h_jet_ycut3.pdf}
+    \begin{minipage}{5cm}
+        \usebox0
+        \caption{Nombre de jets pour $y_\text{cut} = 0.01$}
+        \label{fig:enter-label}
+    \end{minipage}
+\end{figure}
+
+\endminipage
+\hspace{.0333\textwidth}
+\minipage{.45\textwidth}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = .7 \textwidth]{Up/h_jet_ycut4.pdf}
+    \begin{minipage}{5cm}
+        \usebox0
+        \centering
+        \caption{Nombre de jets pour $y_\text{cut} = 0.5$}
+        \label{fig:ycut_4}
+    \end{minipage}
+\end{figure}
+\endminipage
+\vspace{0.5cm}
+\begin{itemize}
+    \item[]
+\end{itemize}
+On peut observer que le nombre d'évènements avec un nombre de jets important diminue lorsque on augmente la valeur de $y_\text{cut}$. \\
+Nous avons illustré plusieurs cas correspondant à plusieurs valeurs distinctes de $y_\text{cut}$. Par exemple, pour un $y_\text{cut} \rightarrow 1$, on constate que chaque particule est identifiée comme une jet à part entière.\\
+Au contraire, dans le cas de $y_\text{cut,4}$ (fig. \ref{fig:ycut_4}), on observe une disparition totale des évènements à 3 jets. Cela peut s'interpréter comme l'impossibilité pour le gluon (au niveau reconstruit) d'emporter plus de la moitié de l'énergie disponible dans centre de masse.\\
+Enfin, notons qu'il existe des algorithmes plus complexes (par exemple l'algorithme de $k_T$) permettant d'obtenir de meilleurs résulats.
+
+\section{Interaction $q \bar{q}\rightarrow e^+e^-$, processus de Drell-Yan}
+Lorsque l'on considère le processus $q \bar{q}\rightarrow e^+e^- $ plutôt que $e^+e^- \rightarrow  q \bar{q}$, la principale différence est le rapport entre la masse des particules de l'état final et initial, qui est inversé. Pour que cela soit significatif, plaçons nous dans la limite des basses énergies. On a alors $s = (p_1 + p_2)^2 \approx (m_q + m_{\overline{q}})^2$. Considérons le cas le plus léger, soit l'annihilation d'un paire $u-\overline{u}$. Alors $\sqrt{s} \approx 2.2 $ MeV, là où la masse d'une paire électron - positron est $m_{e^+ + e^-} \approx 1.2$ MeV.\\
+De plus, contrairement au cas considéré ici, les particules finales étant des leptons, elles ne peuvent radier de gluon. Elles pourront néanmoins radier des photons, ce qui constituerait une correction QED et non QCD. S'ajoute à cela le besoin de retirer le facteur du nombre de couleur présent dans l'expression de la section efficace \eqref{section_efficace}.\\
+Dans l'hypothèse d'un collisionneur proton-proton, au moins un des deux quarks (l'antiquark) doit venir de la mer. Les quarks n'emportant qu'une fraction de l'impulsion du proton, on ne connaît pas exactement les impulsions des quarks qui interagissent. On doit alors considérer les fonctions des distributions des partons (PDF, Parton Distribution Function). Pour obtenir une masse invariante de l'ordre de $\sqrt{20}$ GeV, il faut ainsi une énergie du faisceau plus importante. Négliger la contribution d'un échange de boson $Z$ n'est alors plus pertinent.
+
+\newpage
+\section{Conclusion}
+
+Dans ce rapport, nous avons étudié la correction radiative QCD de l'interaction $e^+e^-\rightarrow q\bar q$ avec émission d'un gluon dans l'état final.\\
+Pour cela, nous avons dans un premier temps travaillé l'expression de la section efficace $\sigma$ afin d'y faire apparaître les variables aléatoires et indépendantes.\\
+Dans un deuxième temps, nous avons simulé des évènements $e^+e^-\rightarrow q\bar q g$ à l'aide de ces variables aléatoires grâce à une méthode de type \textit{de Monte-Carlo}. L'efficacité étant particulièrement basse, nous avons appliqué un changement de variable bien choisi. L'efficacité finale est d'environ $56\%$. Nous nous sommes également intéressé au niveau reconstruit de la simulation.\\
+Nous avons alors analysé les différents graphes obtenus et pu retrouver les corrélations  et résultats attendus. En particulier, nous pouvons citer l'exemple de l'angle d'Ellis-Karliner $\theta_{EK}$, et la correlation entre la section efficace et la fraction d'énergie du quark.\\
+Enfin, nous avons tenté d'implémenter une version simple de l'algorithme \textit{JADE} afin de reconstituer le nombre de jets par évènement et de comparer ces résultats avec ceux présents dans la littérature.\\
+Pour finir, nous avons commenté le processus inverse $q \bar{q}\rightarrow e^+e^-$, ses éventuelles radiations ainsi que sa réalisation dans un collisionneur $p-p$.\\
+
+\newpage
+\section{Annexe}
+Par souci de concision, seul le code pour la simulation \textit{down} est affiché ci-dessous. Le code de la simulation combinée \textit{mix} peut être trouvée dans la référence \cite{codes}. 
+\lstinputlisting[language=C++, caption = simulation \textit{down}]{Codes/code_down.cc}\label{code_tp5}
+
+
+
+
+\printbibliography
+
+\end{document}
